@@ -1,14 +1,15 @@
-from flask_cors import CORS
-import pandas as pd
-import joblib
-from flask_restful import Resource, Api
-import flask_restful
 import joblib as joblib
 from flask import Flask, request, jsonify
+#import joblib
 import sys
 
 sys.modules['sklearn.externals.joblib'] = joblib
+import  flask_restful
+from flask_restful import Resource, Api
 
+import joblib
+import pandas as pd
+from flask_cors import CORS
 
 app = Flask(__name__)
 
@@ -21,17 +22,18 @@ model = joblib.load(open('CoronaViru', 'rb'))
 
 @app.route('/')
 def home():
-    return 'Corona result api 😧'
+    return 'prediction api '
 
 
-@app.route("/predictions", methods=['post'])
+@app.route("/predictions", methods=["post"])
 def predictions():
-    results = request.json['results']
-    predictions = model.predict([results, ])
+    values = request.json['values']
+    predictions = model.predict([ values , ])
+
     if predictions[0] == 0:
-        return 'The person is Negative'
+        return 'The patient negative'
     else:
-        return 'The person is positive '
+        return 'The patient positive '
     # return 'z' #jsonify(list(predictions))
 
 
